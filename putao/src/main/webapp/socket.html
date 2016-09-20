@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+	<title>index</title>
+	<style type="text/css">
+		#touch-bannel{
+			margin:5px auto;
+			width: 100%;
+			height: 400px;
+			border: none;
+			background: #e4a6a6;
+		}
+		#msg{
+			margin: 5px auto;
+			width: 98%;
+    		height: 30px;
+    		font-size: 16px;
+		}
+		#btn-send{
+			width:100%;
+			margin-top: 5px;
+			text-align: center;
+			border-radius: 5px;
+			padding-top: 10px;
+    		padding-bottom: 10px;
+    		background-color: #286090;
+    		color: #FFF;
+    		cursor: pointer;
+		}
+
+		#btn-left{
+			display: inline-block;
+			height: 100px;
+			width: 37%
+		}
+
+		#btn-wheel{
+			display: inline-block;
+			height: 100px;
+			width: 20%;
+			border-left:1px solid #ccc;
+			border-right:1px solid #ccc;
+		}
+
+		#btn-right{
+			display: inline-block;
+			height: 100px;
+			width: 37%
+		}
+		.btn-group{
+			border-bottom:1px solid #ccc;  
+		}
+	</style>
+</head>
+<body>
+	
+
+	<div id='touch-bannel'>
+		
+	</div>
+	<div class="btn-group">
+		<div id="btn-left"></div>
+		<div id="btn-wheel"></div>
+		<div id="btn-right"></div>
+	</div>
+	<!-- <div class='text-input'>
+		<input type="text" id='msg' >
+		<div id="btn-send" >发送</div>
+	</div> -->
+
+</body>
+<script type="text/javascript">
+
+	var env = "home";
+
+	var envMap = {
+		"company":{
+			"host":"ws://192.168.1.119",
+			"port":4444
+		},
+		"home":{
+			"host":"ws://192.168.1.109",
+			"port":4444
+		}
+	};
+
+	var socket = initWebSocket();
+
+	bindMouseMoveHandler(); // 触摸板事件
+
+	leftBtnClickHandler(); // 鼠标左键
+
+	rightBtnClickHandler(); // 鼠标右键
+
+	wheelBtnSlipHandler(); // 滚轮滑动
+
+	//sendBtnHandler(); // 发送信息
+
+	/**
+	 *	actiion 
+	 *  
+	 */
+	function sendBtnHandler(){
+		var sendBtn = document.querySelector('#btn-send');
+		sendBtn.addEventListener('touchstart', function(event) {
+			event.preventDefault();
+			var msg = document.querySelector('#msg').value;
+			console.log(msg)
+			if(msg != ''){
+				/*
+				{
+					'mtype':'msg',
+					'value':'hello world'
+				}
+				*/
+				sendMsg("{'mtype':'msg','value':'"+msg+"'}");
+				document.querySelector('#msg').value="";
+			}
+		}, false);  
+	}
+
+	function bindMouseMoveHandler(){
+
+		var x = 0;
+		var y = 0;
+
+		var time_last = 0;
+		var time_gap = 200;
+
+		var touchBannel = document.querySelector("#touch-bannel");
+
+		touchBannel.addEventListener('touchstart', function(event) {
+			
+			event.preventDefault();
+			var touchend = event.changedTouches[0];
+			x = touchend.pageX;
+			y = touchend.pageY;
+
+			if(time_last == 0){
+				//alert(1);
+				time_last = new Date().getTime();
+				//alert(time_last);
+			}else{
+				//alert(2);
+				var now = new Date().getTime();
+				//alert("last_time="+time_last);
+				//alert("now="+now);
+				console.log("now - time_last = "+(now - time_last));
+				if(0 < now - time_last  && now - time_last < time_gap){ // 双击
+					//alert(now - time_last);
+					sendMsg("{'mtype':'cmd','value':'CLICK','data':{'button':0}}");
+					
+				}
+				time_last = now;
+			}
+
+		}, false);
+
+		
+		touchBannel.addEventListener('touchend', function(event) {
+
+			event.preventDefault();
+			sendMsg("{'mtype':'cmd','value':'SAVE','data':''}");
+
+		}, false);
+
+		touchBannel.addEventListener('touchmove', function(event) {
+
+			event.preventDefault();
+			var touch = event.targetTouches[0];
+			console.log(event);
+			/*
+			{
+				'mtype':'cmd',
+				'value':'MOVE',// UP,DOWN,CLICK,MOVE,INPUT
+				'data':{
+					'x':123
+					'y':222
+				}
+			}
+			*/
+			var msg = "{'mtype':'cmd','value':'MOVE','data':{'x':"+(touch.pageX-x)+",'y':"+(touch.pageY-y)+"}}";
+			sendMsg(msg);
+		}, false); 
+
+	}
+
+	function leftBtnClickHandler(){
+		var leftBtn = document.querySelector("#btn-left");
+		leftBtn.addEventListener('touchstart', function(event) {
+			event.preventDefault();
+			console.log("click left btn");
+		    sendMsg("{'mtype':'cmd','value':'CLICK','data':{'button':0}}");
+		}, false);    
+	}
+	function rightBtnClickHandler(){
+		var rightBtn = document.querySelector("#btn-right");
+		rightBtn.addEventListener('touchstart', function(event) {
+			event.preventDefault();
+			console.log("click right btn");
+		    sendMsg("{'mtype':'cmd','value':'CLICK','data':{'button':1}}");
+		}, false); 
+	}
+
+	function wheelBtnSlipHandler(){
+		var wheelBtn = document.querySelector("#btn-wheel");
+		var startY = 0;
+		wheelBtn.addEventListener('touchstart', function(event) {
+			event.preventDefault();
+			var touch = event.targetTouches[0];
+			startY = touch.pageY;
+		}, false);
+
+		wheelBtn.addEventListener('touchend', function(event) {
+			event.preventDefault();
+			console.log(event);
+			var touchend = event.changedTouches[0];
+			if(touchend.pageY > startY){
+				sendMsg("{'cmd':'DOWN','value':"+(touchend.pageY-startY)+"}");
+			}else{
+				sendMsg("{'cmd':'UP','value':"+(startY-touchend.pageY)+"}");
+			}
+		}, false);
+	}
+
+	function initWebSocket(){
+		// 创建一个Socket实例
+		//var socket = new WebSocket('ws://192.168.1.119:4444');
+		var host = envMap[env].host;
+		var port = envMap[env].port;
+		console.log("host="+host+",port="+port);
+		var socket = new WebSocket(host+":"+port);
+	 
+		// 打开Socket 
+		socket.onopen = function(event) { 
+	 
+	  		// 发送一个初始化消息
+	  		//socket.send('I am the client and I\'m listening!'); 
+	 
+	  		// 监听消息
+	  		socket.onmessage = function(event) { 
+	    		//console.log('Client received a message',event); 
+	    		console.log('Client received a message',event.data); 
+	  		}; 
+	 
+	  		// 监听Socket的关闭
+	  		socket.onclose = function(event) { 
+	    		console.log('Client notified socket has closed',event); 
+	  		}; 
+	 
+	  		// 关闭Socket.... 
+	  		//socket.close() 
+		};
+
+		return socket;
+	}
+
+	function sendMsg(msg){
+		if(socket.readyState==1){
+			socket.send(msg);
+		}else{
+			console.log('建立连接中........');
+		}
+	}
+</script>
+</html>
