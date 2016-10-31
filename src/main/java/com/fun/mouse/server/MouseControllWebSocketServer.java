@@ -149,12 +149,4 @@ public class MouseControllWebSocketServer extends WebSocketServer {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        // 启动鼠标控制websocket服务器
-        InetSocketAddress address = new InetSocketAddress(4444);
-        MouseControllWebSocketServer socket = new MouseControllWebSocketServer(address);
-        socket.start();
-
-        System.out.println("-----mouse server started------");
-    }
 }

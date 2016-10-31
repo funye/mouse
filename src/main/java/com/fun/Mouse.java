@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
  */
 public class Mouse {
     public static void main(String[] args) throws InterruptedException {
-        //startMouseServer();
+        startMouseServer();
         startHttpServer();
     }
 
@@ -27,7 +27,6 @@ public class Mouse {
     }
 
     public static void startHttpServer(){
-
 
         // 启动http服务
         Thread server = new Thread(new HttpServer());
