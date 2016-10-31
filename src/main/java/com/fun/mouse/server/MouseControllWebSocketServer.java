@@ -1,4 +1,4 @@
-package com.fun.mouse;
+package com.fun.mouse.server;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.fun.mouse.core.MessageHandler;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -24,7 +25,6 @@ public class MouseControllWebSocketServer extends WebSocketServer {
     /**
      * 
      * @param address
-     * @param decoders用于限制websocket版本号
      */
     public MouseControllWebSocketServer(InetSocketAddress address, int decoders) {
         super(address, decoders);
@@ -122,16 +122,7 @@ public class MouseControllWebSocketServer extends WebSocketServer {
         }
     }
     
-    /**
-     * 服务端启动
-     * @param args
-     */
-    public static void main(String[] args) {
-        InetSocketAddress address = new InetSocketAddress(4444);
-        MouseControllWebSocketServer socket = new MouseControllWebSocketServer(address);
-        socket.start();//启动websocket服务器进程
-    }
-    
+
     /**
      * 发送消息到某一个连接
      * @param channel
@@ -156,5 +147,14 @@ public class MouseControllWebSocketServer extends WebSocketServer {
                 webSocket.send(message);
             }
         }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        // 启动鼠标控制websocket服务器
+        InetSocketAddress address = new InetSocketAddress(4444);
+        MouseControllWebSocketServer socket = new MouseControllWebSocketServer(address);
+        socket.start();
+
+        System.out.println("-----mouse server started------");
     }
 }

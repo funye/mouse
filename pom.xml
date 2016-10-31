@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>cn</groupId>
-	<artifactId>putao</artifactId>
-	<packaging>war</packaging>
+	<groupId>com</groupId>
+	<artifactId>fun</artifactId>
+	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>pt-fun</name>
+	<name>mouse</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
@@ -34,19 +34,16 @@
 	</dependencies>
 
 	<build>
-		<finalName>activity-web</finalName>
+		<finalName>mouse</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>spring/*</include>
-					<include>spring/mvc/*</include>
-					<include>mappers/*</include>
-					<include>*.xml</include>
+					<include>*.properties</include>
+					<include>webapp/*</include>
 				</includes>
 
 				<excludes>
-					<exclude>env</exclude>
 					<exclude>sql</exclude>
 				</excludes>
 			</resource>
@@ -60,7 +57,7 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
-					<encoding>${project.encoding}</encoding>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 
@@ -69,68 +66,12 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
-					<encoding>${project.encoding}</encoding>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<webappDirectory>${project.basedir}/target/${project.name}</webappDirectory>
-					<warSourceExcludes>WEB-INF/classes/*.xml,WEB-INF/classes/*.properties</warSourceExcludes>
-					<!-- <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
-					<warName>${project.name}</warName>
-					<outputDirectory>${project.basedir}/target</outputDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>war</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<resources>
-					<resource>
-						<directory>src/main/resources/env/dev</directory>
-					</resource>
-				</resources>
-			</build>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<build>
-				<resources>
-					<resource>
-						<directory>src/main/resources/env/prod</directory>
-					</resource>
-				</resources>
-			</build>
-		</profile>
-		<profile>
-			<id>test</id>
-			<build>
-				<resources>
-					<resource>
-						<directory>src/main/resources/env/test</directory>
-					</resource>
-				</resources>
-			</build>
-		</profile>
-	</profiles>
 
 	<!--定义仓库信息 -->
 	<repositories>

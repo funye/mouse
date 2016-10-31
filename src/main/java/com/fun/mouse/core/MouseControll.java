@@ -1,4 +1,4 @@
-package com.fun.mouse;
+package com.fun.mouse.core;
 
 import java.awt.AWTException;
 import java.awt.MouseInfo;

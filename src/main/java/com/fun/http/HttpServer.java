@@ -1,6 +1,5 @@
-package cn.putao.server;
+package com.fun.http;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,27 +11,20 @@ import java.net.Socket;
  * Created by yehuan on 2016/10/31.
  *
  */
-public class HttpServer {
+public class HttpServer implements Runnable{
     /**
      * WEB_ROOT是HTML和其它文件存放的目录. 这里的WEB_ROOT为工作目录下的webroot目录
      */
-    //public static final String WEB_ROOT = System.getProperty("user.dir") + File.separator + "webroot";
-    public static final String WEB_ROOT = HttpServer.class.getResource("/").getPath()+"webapp";
+    public static final String WEB_ROOT = HttpServer.class.getResource("/").getPath()+ "webapp";
 
     // 关闭服务命令
-    private static final String SHUTDOWN_COMMAND = "/SHUTDOWN";
+    private static final String SHUTDOWN_COMMAND = "/stop";
 
     private static final int PORT = 8080;
-    private static final String HOST = "127.0.0.1";
+    private static final String HOST = "192.168.1.100";
 
-    public static void main(String[] args) {
-        HttpServer server = new HttpServer();
-        server.await();
-//        System.out.println(WEB_ROOT);
-
-    }
-
-    public void await() {
+    @Override
+    public void run() {
         ServerSocket serverSocket = null;
         try {
             //服务器套接字对象
