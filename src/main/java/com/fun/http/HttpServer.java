@@ -20,7 +20,7 @@ public class HttpServer implements Runnable{
     // 关闭服务命令
     private static final String SHUTDOWN_COMMAND = "/stop";
 
-    private static final int PORT = 8080;
+    private static final int PORT = 80;
     private static final String HOST = "192.168.1.100";
 
     @Override
