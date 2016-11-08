@@ -1,6 +1,5 @@
 package com.fun.utils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -17,11 +16,7 @@ public class Config {
 
         property = new Properties();
         try {
-
-            System.out.println(Config.class.getResource("/"));
-            String path = Config.class.getResource("/").getPath()+"config.properties";
-            System.out.println(path);
-            InputStream in = new FileInputStream(path);
+            InputStream in = Config.class.getResourceAsStream("/config.properties");
             property.load(in);
         } catch (IOException e) {
             e.printStackTrace();
