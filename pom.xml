@@ -39,8 +39,8 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>*.properties</include>
-					<include>webapp/*</include>
+					<include>*/*</include>
+					<include>*</include>
 				</includes>
 
 				<excludes>
