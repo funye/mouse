@@ -3,16 +3,22 @@ package com.fun.ui;
 import com.fun.utils.DateUtil;
 import com.fun.utils.Language;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+import java.io.IOException;
 
 /**
  * Created by yehuan on 2016/11/8.
+ *
  */
 public class MouseFrame {
     private JTextField hostInput;
@@ -22,6 +28,9 @@ public class MouseFrame {
     private JPanel mainPanel;
     private JTextPane logPane;
     private JButton btnClear;
+    private JLabel host;
+    private JLabel port;
+    private JLabel logLabel;
 
     public static void main(String[] args) {
 
@@ -32,9 +41,15 @@ public class MouseFrame {
     public void launch() {
 
         JFrame jFrame= new JFrame(Language.get("ui.title"));
-
+        Image image;
+        try {
+            image= ImageIO.read(this.getClass().getResource("/webapp/mouse.png"));
+            jFrame.setIconImage(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         jFrame.setContentPane(mainPanel);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.pack();
         jFrame.setSize(800, 600);
         jFrame.setLocationRelativeTo(mainPanel);//居中
@@ -42,8 +57,14 @@ public class MouseFrame {
 
         MyListener listener = new MyListener();
 
+        btn.setText(Language.get("ui.start"));
+        btnClear.setText(Language.get("ui.clear"));
         btn.addActionListener(listener);
         btnClear.addActionListener(listener);
+
+        host.setText(Language.get("ui.host"));
+        port.setText(Language.get("ui.port"));
+        logLabel.setText(Language.get("ui.log"));
     }
 
     public class MyListener implements ActionListener {

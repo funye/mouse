@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="ea6ac" class="javax.swing.JLabel">
+      <component id="ea6ac" class="javax.swing.JLabel" binding="host">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -36,7 +36,7 @@
           <text value="8080"/>
         </properties>
       </component>
-      <component id="3fab3" class="javax.swing.JLabel">
+      <component id="3fab3" class="javax.swing.JLabel" binding="port">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -44,7 +44,7 @@
           <text resource-bundle="language/zh_cn" key="ui.port"/>
         </properties>
       </component>
-      <component id="d732f" class="javax.swing.JLabel">
+      <component id="d732f" class="javax.swing.JLabel" binding="logLabel">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

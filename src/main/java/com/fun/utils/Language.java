@@ -16,8 +16,8 @@ public class Language {
 
     private static Properties initProperty(){
 
-        String path = Language.class.getResource("/language/"+ Config.get("lang")
-                +".properties").getPath();
+        String path = Language.class.getResource("/").getPath()+"language/"+ Config.get("lang")
+                +".properties";
         property = new Properties();
         try {
             InputStream in = new FileInputStream(path);

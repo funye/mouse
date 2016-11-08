@@ -17,7 +17,10 @@ public class Config {
 
         property = new Properties();
         try {
-            String path = Config.class.getResource("/config.properties").getPath();
+
+            System.out.println(Config.class.getResource("/"));
+            String path = Config.class.getResource("/").getPath()+"config.properties";
+            System.out.println(path);
             InputStream in = new FileInputStream(path);
             property.load(in);
         } catch (IOException e) {
@@ -32,4 +35,5 @@ public class Config {
         }
         return property.getProperty(key);
     }
+
 }
