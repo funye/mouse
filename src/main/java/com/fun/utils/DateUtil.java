@@ -28,6 +28,13 @@ public class DateUtil {
 
 //    public static void main(String[] args){
 //        System.out.println(currentDate());
+//        System.out.println(log("hello {},hello {},{}","java",123,4555));
 //    }
+
+    public static String log(String msg,Object... objs) {
+        msg = msg.replaceAll("\\{\\}","%s");
+        return String.format(msg,objs);
+    }
+
 
 }

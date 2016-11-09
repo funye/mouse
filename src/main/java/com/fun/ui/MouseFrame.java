@@ -83,7 +83,7 @@ public class MouseFrame {
             JButton button = (JButton)e.getSource();
             if(button == btn){
 
-                log("click the btn with text [ " +button.getText()+ " ]");
+                log("click the btn with text [ {} ]",button.getText());
                 if(btn.getText().equals(Language.get("ui.start"))){ // 启动
 
                     hostname = hostInput.getText();
@@ -92,7 +92,7 @@ public class MouseFrame {
                     hostname = hostname == null ? "192.168.1.119":hostname;
                     int port = portStr == null ? 8080:Integer.parseInt(portStr);
 
-                    log("it't going to start httpserver on [ "+hostname+" ] with port [ "+port+" ]");
+                    log("it't going to start httpserver on [ {} ] with port [ {} ]",hostname,port);
                     // to start http server
                     if(server == null ) {
                         log("server is null");
@@ -103,10 +103,10 @@ public class MouseFrame {
                         httpServerThread = new Thread(server);
                         httpServerThread.start();
                     }
-                    log("httpserver on [ "+hostname+" ] with port [ "+port+" ] started success");
+                    log("httpserver on [ {} ] with port [ {} ] started success",hostname,port);
 
                     // to start mouse server
-                    log("it's going to start mouse controll server on [ "+hostname+" ] ");
+                    log("it's going to start mouse controll server on [ {} ] ",hostname);
 
                     if(mouserServer == null ) {
                         InetSocketAddress address = new InetSocketAddress(hostname, MOUSE_SERVER_PORT);
@@ -115,33 +115,34 @@ public class MouseFrame {
                     }else{
                         mouserServer.resume();
                     }
-                    log("mouse controll server on [ "+hostname+" ] started success");
+                    log("mouse controll server on [ {} ] started success",hostname);
 
                     btn.setText(Language.get("ui.stop"));
 
                 }else{// 关闭
 
-                    log("server on host [ " + hostname + " ] is stopping ...");
+                    log("server on host [ {} ] is stopping ...",hostname);
                     // the mouse controll server can only start once
                     mouserServer.pause();
-                    log("server on host [ " + hostname + " ] is stoped");
+                    log("server on host [ {} ] is stoped",hostname);
 
                     btn.setText(Language.get("ui.start"));
                 }
             }else if(button == btnClear){
                 logPane.setText("");
             }else{
-                log("这是测试消息，source="+e.getSource() + ", ======  id=" + e.getID());
+                log("这是测试消息，source={}, ======  id={}" ,e.getSource() ,e.getID());
             }
         }
     }
 
-    public void log(String msg) {
+    public void log(String msg,Object... objs) {
         //设置字体大小
         SimpleAttributeSet attrset = new SimpleAttributeSet();
         StyleConstants.setFontSize(attrset,12);
         //插入内容
         Document docs = logPane.getDocument();//获得文本对象
+        msg = String.format(msg.replaceAll("\\{\\}","%s"),objs);
         String insert = "[ "+ DateUtil.currentDate()+" ]\t"+msg+"\n";
         try {
             docs.insertString(docs.getLength(), insert,attrset);//对文本进行追加
