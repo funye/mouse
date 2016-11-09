@@ -21,5 +21,6 @@ release 目录的jar双击直接运行，或者进入项目在任意喜欢的ide
 http://ip:port/socket.html (ip和port分别换成填写的ip和端口)
 
 点击手机页面中相应位子操作，其中面板双击确定
+
 ![鼠标](./mouse-func.png)
 
