@@ -75,7 +75,8 @@
 
 //	alert("abc");
 
-	var env = "company";
+	var env = "prod";
+
 
 	var envMap = {
 		"company":{
@@ -85,9 +86,27 @@
 		"home":{
 			"host":"ws://192.168.1.100",
 			"port":4444
+		},
+		"prod":{
+			"host":"ws://"+getHostIp(),
+			"port":4444
 		}
 	};
 
+	function getHostIp(){
+		var curWwwPath=window.document.location.href;
+		console.log("1==>"+curWwwPath);
+		var pathName=window.document.location.pathname;
+		console.log("2==>"+pathName);
+		var pos=curWwwPath.indexOf(pathName);
+		var localhostPath=curWwwPath.substring(curWwwPath.indexOf(":")+3,pos);
+		console.log("3==>"+localhostPath);
+		if(localhostPath.indexOf(":")>=0){
+			return localhostPath.substring(0,localhostPath.indexOf(":"));
+		}else{
+			return localhostPath;
+		}
+	}
 
 
 	var socket = initWebSocket();
