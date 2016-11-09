@@ -17,6 +17,8 @@ import com.alibaba.fastjson.JSONObject;
 public class MouseControllWebSocketServer extends WebSocketServer {
     
     public static Map<String, List<WebSocket>> socketMap = new HashMap<>();//频道-进入频道用户的连接列表
+
+    public static boolean isStop = false;
     
     public MouseControllWebSocketServer(InetSocketAddress address) {
         super(address);
@@ -64,11 +66,16 @@ public class MouseControllWebSocketServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("onMessage");
-        System.out.println(message);
+//        System.out.println(message);
         /*List<WebSocket> socketList = socketMap.get(message);
         for (WebSocket webSocket : socketList) {
             webSocket.send("已收到~");
         }*/
+
+        System.out.println("isStop="+isStop);
+        if(isStop) { // 如果状态是暂停，直接返回，不回应
+            return ;
+        }
         try {
         	JSONObject msgObj = JSONObject.parseObject(message);
         	String mtype=msgObj.getString("mtype");
@@ -110,6 +117,7 @@ public class MouseControllWebSocketServer extends WebSocketServer {
     @Override
     public void onError(WebSocket conn, Exception ex) {
         System.out.println("onError");
+        ex.printStackTrace();
         Set<String> setList = socketMap.keySet();
         for (String string : setList) {
             if (socketMap.get(string).contains(conn)) {
@@ -147,6 +155,14 @@ public class MouseControllWebSocketServer extends WebSocketServer {
                 webSocket.send(message);
             }
         }
+    }
+
+    public void pause(){
+        isStop = true;
+    }
+
+    public void resume(){
+        isStop = false;
     }
 
 }

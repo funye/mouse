@@ -1,5 +1,7 @@
 package com.fun.ui;
 
+import com.fun.http.HttpServer;
+import com.fun.mouse.server.MouseControllWebSocketServer;
 import com.fun.utils.DateUtil;
 import com.fun.utils.Language;
 
@@ -12,9 +14,8 @@ import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 /**
  * Created by yehuan on 2016/11/8.
@@ -31,6 +32,14 @@ public class MouseFrame {
     private JLabel host;
     private JLabel port;
     private JLabel logLabel;
+
+    private HttpServer server;
+    private Thread httpServerThread;
+
+    MouseControllWebSocketServer mouserServer;
+
+    private String hostname;
+    private static final int MOUSE_SERVER_PORT=4444;
 
     public static void main(String[] args) {
 
@@ -73,21 +82,49 @@ public class MouseFrame {
 
             JButton button = (JButton)e.getSource();
             if(button == btn){
-                String host = hostInput.getText();
-                String portStr = portInput.getText();
-
-                host = host == null ? "192.168.1.119":host;
-                int port = portStr == null ? 8080:Integer.parseInt(portStr);
 
                 log("click the btn with text [ " +button.getText()+ " ]");
                 if(btn.getText().equals(Language.get("ui.start"))){ // 启动
-                    log("it't going to start httpserver on [ "+host+" ] with port [ "+port+" ]");
-                    // to start server
+
+                    hostname = hostInput.getText();
+                    String portStr = portInput.getText();
+
+                    hostname = hostname == null ? "192.168.1.119":hostname;
+                    int port = portStr == null ? 8080:Integer.parseInt(portStr);
+
+                    log("it't going to start httpserver on [ "+hostname+" ] with port [ "+port+" ]");
+                    // to start http server
+                    if(server == null ) {
+                        log("server is null");
+                        server = new HttpServer(hostname,port);
+                    }
+                    if(httpServerThread == null){
+                        log("httpServerThread is null...");
+                        httpServerThread = new Thread(server);
+                        httpServerThread.start();
+                    }
+                    log("httpserver on [ "+hostname+" ] with port [ "+port+" ] started success");
+
+                    // to start mouse server
+                    log("it's going to start mouse controll server on [ "+hostname+" ] ");
+
+                    if(mouserServer == null ) {
+                        InetSocketAddress address = new InetSocketAddress(hostname, MOUSE_SERVER_PORT);
+                        mouserServer = new MouseControllWebSocketServer(address);
+                        mouserServer.start();
+                    }else{
+                        mouserServer.resume();
+                    }
+                    log("mouse controll server on [ "+hostname+" ] started success");
 
                     btn.setText(Language.get("ui.stop"));
+
                 }else{// 关闭
-                    log("it't going to stop httpserver on [ "+host+" ] with port [ "+port+" ]");
-                    // to stop server
+
+                    log("server on host [ " + hostname + " ] is stopping ...");
+                    // the mouse controll server can only start once
+                    mouserServer.pause();
+                    log("server on host [ " + hostname + " ] is stoped");
 
                     btn.setText(Language.get("ui.start"));
                 }

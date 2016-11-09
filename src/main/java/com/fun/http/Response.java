@@ -43,8 +43,6 @@ public class Response {
                  Connection: keep-alive
                  */
 
-
-
                 output.write("HTTP/1.1 200 ok\r\n".getBytes());
                 output.write("Accept-Ranges:bytes\r\n".getBytes());
                 output.write("Cache-Control:no-cache\r\n".getBytes());
