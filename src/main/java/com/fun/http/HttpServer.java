@@ -18,11 +18,7 @@ public class HttpServer implements Runnable{
     /**
      * WEB_ROOT是HTML和其它文件存放的目录. 这里的WEB_ROOT为工作目录下的webroot目录
      */
-    //public static final String WEB_ROOT = System.getProperty("user.dir") + File.separator + "webroot";
-    public static final String WEB_ROOT = HttpServer.class.getResource("/").getPath()+"webapp";
-
-    // 关闭服务命令
-    private static final String SHUTDOWN_COMMAND = "/SHUTDOWN";
+    public static final String WEB_ROOT = "/webapp";
 
     ServerSocket serverSocket = null;
     Socket socket = null;
@@ -35,10 +31,6 @@ public class HttpServer implements Runnable{
     public HttpServer(String HOST, int PORT) {
         this.HOST = HOST;
         this.PORT = PORT;
-    }
-
-    public HttpServer(String HOST) {
-        this.HOST = HOST;
     }
 
     public HttpServer() {

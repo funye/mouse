@@ -1,9 +1,8 @@
 package com.fun.http;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import com.fun.utils.Config;
+
+import java.io.*;
 import java.util.Date;
 
 /**
@@ -26,11 +25,11 @@ public class Response {
 
     public void sendStaticResource() throws IOException {
         byte[] bytes = new byte[BUFFER_SIZE];
-        FileInputStream fis = null;
+        InputStream in = null;
         try {
             //将web文件写入到OutputStream字节流中
-            File file = new File(HttpServer.WEB_ROOT, request.getUri());
-            if (file.exists()) {
+            in = this.getClass().getResourceAsStream(HttpServer.WEB_ROOT+request.getUri());
+            if (in != null) {
 
                 /**
                  *  HTTP/1.1 200 ok
@@ -46,7 +45,7 @@ public class Response {
                 output.write("HTTP/1.1 200 ok\r\n".getBytes());
                 output.write("Accept-Ranges:bytes\r\n".getBytes());
                 output.write("Cache-Control:no-cache\r\n".getBytes());
-                output.write(("Content-Length: "+file.length()+"\r\n").getBytes());
+                output.write(("Content-Length: "+in.available()+"\r\n").getBytes());
                 output.write("Content-Type: text/html; charset=UTF-8\r\n".getBytes());
                 output.write(("Date:"+new Date()+"\r\n").getBytes());
                 output.write(("X-Powered-By: fun server\r\n").getBytes());
@@ -56,11 +55,10 @@ public class Response {
 
                 output.flush();
 
-                fis = new FileInputStream(file);
-                int ch = fis.read(bytes, 0, BUFFER_SIZE);
+                int ch = in.read(bytes, 0, BUFFER_SIZE);
                 while (ch != -1) {
                     output.write(bytes, 0, ch);
-                    ch = fis.read(bytes, 0, BUFFER_SIZE);
+                    ch = in.read(bytes, 0, BUFFER_SIZE);
                 }
             } else {
                 // file not found
@@ -72,8 +70,8 @@ public class Response {
             // thrown if cannot instantiate a File object
             System.out.println(e.toString());
         } finally {
-            if (fis != null)
-                fis.close();
+            if (in != null)
+                in.close();
         }
     }
 }
