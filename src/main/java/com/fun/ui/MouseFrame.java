@@ -116,7 +116,7 @@ public class MouseFrame {
                         mouserServer.resume();
                     }
                     log("mouse controll server on [ {} ] started success",hostname);
-
+                    log("open in mobile web browse with url:  http://{}:{}/socket.html",hostname,port);
                     btn.setText(Language.get("ui.stop"));
 
                 }else{// 关闭
