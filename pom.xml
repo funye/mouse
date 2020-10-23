@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com</groupId>
-	<artifactId>fun</artifactId>
+	<groupId>com.fun</groupId>
+	<artifactId>mouse</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mouse</name>
@@ -30,6 +30,13 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.2.4</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.intellij/forms_rt -->
+		<dependency>
+			<groupId>com.intellij</groupId>
+			<artifactId>forms_rt</artifactId>
+			<version>7.0.3</version>
 		</dependency>
 	</dependencies>
 
@@ -70,7 +77,7 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
@@ -83,6 +90,30 @@
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.fun.ui.MouseFrame</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
