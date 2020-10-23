@@ -4,13 +4,13 @@
 发现要过去电脑旁点上一集、下一集好烦，如果手机直接控制电脑就好了。
 于是尝试写了个小程序，方便使用。
 
-由于项目是java项目，所有要求电脑安装了jdk环境
+使用方式：
 
-release 目录的jar双击直接运行，或者进入项目在任意喜欢的ide中
-运行 MouseFrame
+- 如果电脑有安装java运行环境，直接在 release 目录双击jar文件或者转到命令行中执行 `java -jar mouse-jar-with-dependencies.jar`
+- 或者直接使用 imouse-windows-0.0.1， 进入目录，双击exe (windows用户)
 
-程序运行之后，填写当前要被控制的电脑的ip,和希望服务器时候的端口port
-（4444除外）：
+程序运行之后，填写当前要被控制的电脑的ip,和希望服务时候的端口port（4444除外）：
+
 如下图：
 
 ![运行效果](./mouse-home.png)
